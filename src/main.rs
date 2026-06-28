@@ -5,8 +5,12 @@ use actor::ActorHandle;
 #[tokio::main]
 async fn main() {
     let handle = ActorHandle::new();
-    let val = handle.get_unique_id().await;
+    { 
+        let another_handle = handle.clone();
+        let id = another_handle.get_unique_id().await;
+        println!("{id}");
+    }
+    let id = handle.get_unique_id().await;
     let trimmed_text = handle.trim_text("Hello     ".to_string()).await;
-    println!("{:?}", val);
-    println!("{:?}", trimmed_text);
+    println!("{id}, {trimmed_text}");
 }

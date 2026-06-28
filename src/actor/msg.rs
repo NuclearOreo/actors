@@ -2,7 +2,7 @@ use tokio::sync::oneshot;
 
 pub enum Msg {
     GetUniqueId {
-        respond_to: oneshot::Sender<i32>,
+        respond_to: oneshot::Sender<u32>,
     },
     TrimText {
         text: String,

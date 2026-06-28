@@ -15,7 +15,7 @@ impl ActorHandle {
         tokio::spawn( async move { actor.run().await });
         Self { sender }
     }
-    pub async  fn get_unique_id(&self) -> i32 {
+    pub async  fn get_unique_id(&self) -> u32 {
         let (send, recv) = oneshot::channel();
         let msg = Msg::GetUniqueId { respond_to: send };
         let _ = self.sender.send(msg).await;

@@ -3,7 +3,7 @@ use tokio::sync::mpsc;
 
 pub struct Actor {
     receiver: mpsc::Receiver<Msg>,
-    next_id: i32
+    next_id: u32
 }
 
 impl Actor {
