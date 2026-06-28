@@ -13,6 +13,11 @@ impl Actor {
             next_id: 0,
         }
     }
+    pub async fn run(&mut self) {
+        while let Some(msg) = self.receiver.recv().await {
+            self.handle_msg(msg);
+        }
+    }
     fn handle_msg(&mut self, msg: Msg ) {
         match msg {
             Msg::GetUniqueId { respond_to } => {
@@ -20,11 +25,5 @@ impl Actor {
                 let _ = respond_to.send(self.next_id);
             },
         }
-    }
-}
-
-pub async fn run_my_actor(mut actor: Actor) {
-    while let Some(msg) = actor.receiver.recv().await {
-        actor.handle_msg(msg);
     }
 }

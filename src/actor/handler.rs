@@ -1,5 +1,5 @@
 use crate::actor::msg::Msg;
-use crate::actor::actor::{Actor, run_my_actor};
+use crate::actor::actor::Actor;
 use tokio::sync::{mpsc, oneshot};
 
 
@@ -11,8 +11,8 @@ pub struct ActorHandle {
 impl ActorHandle {
     pub fn new() -> Self {
         let (sender,  reciever) = mpsc::channel(8);
-        let actor = Actor::new(reciever);
-        tokio::spawn(run_my_actor(actor));
+        let mut actor = Actor::new(reciever);
+        tokio::spawn( async move { actor.run().await });
         Self { sender }
     }
     pub async  fn get_unique_id(&self) -> i32 {
