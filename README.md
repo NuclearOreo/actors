@@ -36,7 +36,7 @@ Each variant carries the data for that request plus a `oneshot::Sender<T>` to se
 
 ```rust
 pub enum Msg {
-    GetUniqueId { respond_to: oneshot::Sender<i32> },
+    GetUniqueId { respond_to: oneshot::Sender<u32> },
     TrimText { text: String, respont_to: oneshot::Sender<String> },
 }
 ```
@@ -58,13 +58,18 @@ pub async fn run(&mut self) {
 `ActorHandle::new()` creates the channel, builds the `Actor`, and **spawns it with `tokio::spawn`** — spawning lives in the constructor, not inside actor methods, to avoid lifetime trouble. Each public method builds a `Msg`, sends it, and awaits the `oneshot` reply.
 
 ```rust
-pub async fn get_unique_id(&self) -> i32 {
+pub async fn get_unique_id(&self) -> u32 {
     let (send, recv) = oneshot::channel();
     let msg = Msg::GetUniqueId { respond_to: send };
     let _ = self.sender.send(msg).await;
     recv.await.expect("Actor task has been killed")
 }
 ```
+
+`main.rs` showcases that the handle is `Clone`: it clones the handle and calls
+`get_unique_id()` from the clone, then makes more calls from the original. Both
+talk to the *same* actor task over the same `mpsc` channel, so the ids stay
+unique across clones.
 
 ## Running
 
@@ -76,10 +81,11 @@ Expected output:
 
 ```
 1
-"Hello"
+2, Hello
 ```
 
-(`get_unique_id` returns the first id; `trim_text` trims `"Hello     "`.)
+(The cloned handle gets id `1`; the original handle then gets id `2`, and
+`trim_text` trims `"Hello     "` down to `Hello`.)
 
 ## Design notes from the blog post
 
