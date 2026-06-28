@@ -1,6 +1,6 @@
 mod actor;
 
-use actor::handler::ActorHandle;
+use actor::ActorHandle;
 
 #[tokio::main]
 async fn main() {

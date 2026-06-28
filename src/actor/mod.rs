@@ -1,3 +1,5 @@
-pub mod msg;
-pub mod actor;
-pub mod handler;
+mod msg;
+mod actor;
+mod handler;
+
+pub use handler::ActorHandle;

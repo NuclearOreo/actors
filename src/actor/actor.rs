@@ -1,4 +1,4 @@
-use crate::actor::msg::Msg;
+use super::msg::Msg;
 use tokio::sync::mpsc;
 
 pub struct Actor {

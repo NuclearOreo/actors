@@ -1,5 +1,5 @@
-use crate::actor::msg::Msg;
-use crate::actor::actor::Actor;
+use super::msg::Msg;
+use super::actor::Actor;
 use tokio::sync::{mpsc, oneshot};
 
 
