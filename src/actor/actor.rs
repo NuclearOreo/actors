@@ -18,12 +18,17 @@ impl Actor {
             self.handle_msg(msg);
         }
     }
-    fn handle_msg(&mut self, msg: Msg ) {
+    pub fn handle_msg(&mut self, msg: Msg ) {
         match msg {
             Msg::GetUniqueId { respond_to } => {
                 self.next_id += 1;
                 let _ = respond_to.send(self.next_id);
             },
+            Msg::TrimText { text, respont_to } => {
+                let new_string= text.trim().to_string();
+                let _ = respont_to.send(new_string);
+            }
+            
         }
     }
 }

@@ -21,4 +21,10 @@ impl ActorHandle {
         let _ = self.sender.send(msg).await;
         recv.await.expect("Actor task has been killed")
     }
+    pub async  fn trim_text(&self, text: String) -> String {
+        let (send, recv) = oneshot::channel();
+        let msg = Msg::TrimText { text: text, respont_to: send };
+        let _ = self.sender.send(msg).await;
+        recv.await.expect("Actor task has been killed")
+    }
 }
